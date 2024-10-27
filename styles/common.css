@@ -10,21 +10,25 @@ body {
     src: url('../fonts/MuseoSansCyrl500.ttf');
     font-weight: 400;
 }
+
 @font-face {
     font-family: Museo ;
     src: url('../fonts/MuseoSansCyrl700.ttf');
     font-weight: 600;
 }
-.header{
+
+.header {
     padding: 45px 0 40px 0;
     border-bottom: 1px solid #DCDCF3;
 
 }
-.container{
+
+.container {
     margin: 0 auto;
     max-width: 1200px;
 }
-.button{
+
+.button {
     padding: 14px 35px 14px 35px;
     border-radius: 6px;
     background-color: #6933DC;
@@ -36,21 +40,73 @@ body {
     cursor: pointer;
     border: 0;
 }
-.button:hover{
+
+.button:hover {
     background-color: #381e73;
 }
-.footer{
+
+.transparent {
+    background-color: transparent;
+    color: #6933DC;
+    border: 1px solid #6933DC;
+}
+
+.transparent:hover {
+    background-color: #6933DC;
+    color: white;
+}
+
+.footer {
     text-align: center;
     padding: 40px 0 40px 0;
     font-size: 13px;
     font-weight: 400;
     color: #DCDCF3;
 }
-.common-title{
+
+.big-title {
+    font-size: 54px;
+    font-weight: 600;
+    line-height: 64.8px;
+}
+
+.big-title span {
+    color: #6933DC;
+}
+
+.common-title {
     font-size: 48px;
     font-weight: 600;
     line-height: 57.6px;
 }
-.common-title span{
+
+.common-title span {
     color: #6933DC;
+}
+
+input[type='radio'] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #6933DC;
+    border-radius: 50%;
+    margin: 0 13px 0 0;
+    transform: translateY(1px);
+    display: grid;
+    place-content: center;
+}
+
+input[type='radio']::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: inset 10px 10px 0 #6933DC;
+    transition: .2s ease transform;
+    transform: scale(0);
+}
+
+input[type='radio']:checked::before {
+    transform: scale(1);
 }

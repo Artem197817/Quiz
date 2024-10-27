@@ -12,17 +12,7 @@
 .content{
     max-width: 588px;
 }
-.main-title{
 
-    font-size: 54px;
-    font-weight: 600;
-    line-height: 64.8px;
-    text-align: left;
-}
-
-.main-title span{
-    color: #6933DC;
-}
 .main-description{
     margin-top: 40px;
     font-size: 20px;
