@@ -26,8 +26,8 @@
                     <label for="name" class="form-label">Имя</label>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-input" id="lastName" required>
-                    <label for="lastName" class="form-label">Фамилия</label>
+                    <input type="text" class="form-input" id="last-name" required>
+                    <label for="last-name" class="form-label">Фамилия</label>
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-input" id="email" required>
@@ -37,12 +37,12 @@
                     <input type="checkbox" id="agree" required>
                     <label for="agree" >
                         Я ознакомлен
-                        <a href="#" class="link-agree">с правилами сайта</a>
+                        <a href="#" class="link-agree" >с правилами сайта</a>
                     </label>
                 </div>
             </div>
             <div class="form-action">
-                <button class="button form-button">Перейти к выбору теста</button>
+                <button class="button form-button " id="process" disabled>Перейти к выбору теста</button>
             </div>
         </div>
         <div class="form-image">
@@ -57,5 +57,6 @@
     «АйтилогияQuiz» © Все права защищены / 2022
 </footer>
 
+<script src="scripts/form.js"></script>
 </body>
 </html>

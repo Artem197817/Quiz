@@ -42,38 +42,23 @@
             </div>
         </div>
         <div class="test-question">
-            <h2 class="test-title">
+            <h2 class="test-title" id="title">
                 <span>Вопрос 2: </span> Тут должен быть текст вопроса?
             </h2>
-            <div class="test-question-options">
-                <div class="test-question-option">
-                    <input type="radio" id="answer-one" name="answer">
-                    <label for="answer-one">Вариант ответа 1</label>
-                </div>
-                <div class="test-question-option">
-                    <input type="radio" id="answer-two" name="answer">
-                    <label for="answer-two">Вариант ответа 2</label>
-                </div>
-                <div class="test-question-option">
-                    <input type="radio" id="answer-three" name="answer">
-                    <label for="answer-three">Вариант ответа 3</label>
-                </div>
-                <div class="test-question-option">
-                    <input type="radio" id="answer-four" name="answer">
-                    <label for="answer-four">Вариант ответа 4</label>
-                </div>
+            <div class="test-question-options" id="options">
+
             </div>
         </div>
         <div class="test-question-action">
             <div class="test-prev-action">
-                <button class="button transparent">Назад</button>
+                <button class="button transparent" id="prev" disabled>Назад</button>
             </div>
             <div class="test-time">
                 <div class="test-time-text">Осталось времени:</div>
                 <div class="test-time-clock">49</div>
             </div>
             <div class="test-next-action">
-                <button class="button transparent">Дальше</button>
+                <button class="button transparent" id="next" disabled>Дальше</button>
             </div>
         </div>
         <div class="pass-question">
@@ -88,5 +73,7 @@
     «АйтилогияQuiz» © Все права защищены / 2022
 </footer>
 
+<script src="scripts/common.js"></script>
+<script src="scripts/test.js"></script>
 </body>
 </html>

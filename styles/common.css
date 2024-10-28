@@ -39,6 +39,22 @@ body {
     transition: 1s;
     cursor: pointer;
     border: 0;
+    text-decoration: none;
+}
+
+a .button{
+    display: inline-block;
+}
+
+.button:disabled{
+    background-color: #7a81a1;
+    cursor: not-allowed;
+}
+.transparent:disabled{
+    color: #DCDCF3;
+    border: 1px solid #DCDCF3;
+    cursor: not-allowed;
+    background-color: transparent;
 }
 
 .button:hover {
