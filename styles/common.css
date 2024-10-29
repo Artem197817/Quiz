@@ -126,3 +126,34 @@ input[type='radio']::before {
 input[type='radio']:checked::before {
     transform: scale(1);
 }
+.pre-title {
+    font-size: 20px;
+    line-height: 24px;
+    color: #DCDCF3;
+
+}
+.pre-title span {
+    color: #6933DC;
+}
+h2 {
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 43.2px;
+
+}
+
+h2 span {
+    color: #6933DC;
+}
+
+.test-question-options {
+    margin-top: 58px;
+    min-height: 344px;
+}
+
+.test-question-option {
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 20px;
+    display: flex;
+}
