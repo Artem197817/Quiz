@@ -1,11 +1,20 @@
-(function (){
-    const Result = {
-        init: function(){
-            const url = new URL(location.href);
-            document.getElementById('result-scope').innerText =
-                url.searchParams.get('score') + '/' + url.searchParams.get('total') ;
+(function () {
 
-        }
+
+    const Result = {
+        userTest: null,
+        init: function () {
+            this.userTest = JSON.parse(sessionStorage.getItem('userTest'));
+            console.log(this.userTest);
+            this.showResult();
+
+
+        },
+        showResult() {
+            document.getElementById('result-scope').innerText =
+                this.userTest.result.score + '/' + this.userTest.result.total;
+        },
+
     }
-Result.init();
+    Result.init();
 })()

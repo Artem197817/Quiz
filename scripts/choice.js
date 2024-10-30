@@ -51,11 +51,18 @@
                     choiceOptionsElement.appendChild(choiceOptionElement);
 
                 })
-            }
+            } 
         },
         choiceQuiz(element){
             const dataId = element.getAttribute('data-id');
             if(dataId){
+                let userTest = {
+                    testId: dataId,
+                };
+                if(sessionStorage.getItem('userTest')){
+                    sessionStorage.removeItem('userTest')
+                }
+                sessionStorage.setItem("userTest", JSON.stringify(userTest))
                 location.href = 'test.html' + location.search + '&id=' + dataId;
             }
         }

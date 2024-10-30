@@ -69,9 +69,16 @@ const Form = {
     processForm(){
         if(this.validateForm){
             let paramString = '';
+            let user = {};
             this.fields.forEach(item => {
                 paramString += (!paramString? '?' : '&') + item.name + '=' + item.element.value
+                user[item.name] = item.element.value
             });
+
+            if(sessionStorage.getItem('user')){
+                sessionStorage.clear
+            }
+            sessionStorage.setItem("user", JSON.stringify(user));
             location.href = 'choice.html' + paramString;
         }
     }

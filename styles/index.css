@@ -1,5 +1,5 @@
 
-.main{
+.main {
     padding-top: 190px;
     padding-bottom: 231px;
 }
@@ -9,21 +9,24 @@
     align-items: center;
     justify-content: space-between;
 }
-.content{
+
+.content {
     max-width: 588px;
 }
 
-.main-description{
+.main-description {
     margin-top: 40px;
     font-size: 20px;
     font-weight: 400;
     line-height: 24px;
     max-width: 486px;
 }
-.main-button{
+
+.main-button {
     margin-top: 60px;
 
 }
-.main-action{
+
+.main-action {
     margin-top: 60px;
 }

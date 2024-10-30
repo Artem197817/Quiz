@@ -9,6 +9,8 @@
         passButtonElement: null,
         userResult: [],
         progresBarElement: null,
+        userTest: null,
+        passLinkElement: null,
 
         init: function () {
             checkUserData();
@@ -29,6 +31,8 @@
                     location.href = 'index.html';
                 }
 
+                this.userTest = JSON.parse(sessionStorage.getItem('userTest'));
+
             }
         },
         startQuiz: function () {
@@ -41,7 +45,8 @@
             this.prevButtonElement = document.getElementById('prev');
             this.prevButtonElement.onclick = this.move.bind(this, 'prev')
             document.getElementById('pre-title').innerText = this.quiz.name;
-            this.progresBarElement = document.getElementById('progress-bar')
+            this.progresBarElement = document.getElementById('progress-bar');
+            this.passLinkElement = document.querySelector('.pass-link');
 
             this.prepareProgressBar();
             this.showQuestion();
@@ -82,7 +87,7 @@
             this.testTitleElement.innerHTML = '<span>Вопрос ' + this.currentQuestionIndex
                 + ': </span> ' + activeQuestion.question;
 
-
+            this.passLinkElement.classList.remove('disabled-link')
             this.testOptionsElement.innerHTML = '';
             const that = this;
             activeQuestion.answers.forEach((answer) => {
@@ -133,6 +138,7 @@
         },
         chooseAnswer: function () {
             this.nextButtonElement.removeAttribute('disabled');
+            this.passLinkElement.classList.add('disabled-link');
         },
         move(action) {
             const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
@@ -141,6 +147,21 @@
             });
 
             let chosenAnswerId = null;
+            if (!choosenAnswer) {
+                chosenAnswerId = -1;
+                const existingResult = this.userResult.find(item => {
+                    return item.questionId === activeQuestion.id;
+                })
+                if (existingResult) {
+                    existingResult.chosenAnswerId = chosenAnswerId
+                } else {
+                    this.userResult.push({
+                        questionId: activeQuestion.id,
+                        chosenAnswerId: chosenAnswerId
+                    })
+                }
+            }
+
             if (choosenAnswer && choosenAnswer.value) {
                 chosenAnswerId = Number(choosenAnswer.value);
 
@@ -207,6 +228,10 @@
                     location.href = 'index.html';
                 }
                 if (result) {
+                    this.userTest.userAnswer = this.userResult;
+                    this.userTest.result = result;
+
+                    sessionStorage.setItem("userTest", JSON.stringify(this.userTest))
                     location.href = 'result.html?score=' + result.score + '&total=' + result.total;
                 }
             } else {
