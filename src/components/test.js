@@ -1,41 +1,43 @@
-(function () {
-    const Test = {
-        quiz: null,
-        currentQuestionIndex: 1,
-        testTitleElement: null,
-        testOptionsElement: null,
-        nextButtonElement: null,
-        prevButtonElement: null,
-        passButtonElement: null,
-        userResult: [],
-        progresBarElement: null,
-        userTest: null,
-        passLinkElement: null,
+import {UrlManager} from "../utils/url-manager.js";
 
-        init: function () {
-            checkUserData();
-            const url = new URL(location.href);
-            const testId = url.searchParams.get('id');
-            if (testId) {
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", 'https://testologia.ru/get-quiz?id=' + testId, false);
-                xhr.send();
-                if (xhr.status === 200 && xhr.responseText) {
-                    try {
-                        this.quiz = JSON.parse(xhr.responseText);
-                    } catch (e) {
-                        location.href = 'index.html';
-                    }
-                    this.startQuiz();
-                } else {
-                    location.href = 'index.html';
+export class Test {
+
+    constructor() {
+        this.quiz= null;
+        this.currentQuestionIndex= 1;
+        this.testTitleElement= null;
+        this.testOptionsElement= null;
+        this.nextButtonElement= null;
+        this.prevButtonElement= null;
+        this.passButtonElement= null;
+        this.userResult= [];
+        this.progresBarElement= null;
+        this.userTest=  JSON.parse(sessionStorage.getItem('userTest'));
+        this.passLinkElement= null;
+        this.routesParam = UrlManager.getQueryParam();
+        this.user=JSON.parse(sessionStorage.getItem('user'));
+        UrlManager.checkUserData(this.routesParam);
+        const testId = this.userTest.testId;
+        if (testId) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", 'https://testologia.ru/get-quiz?id=' + testId, false);
+            xhr.send();
+            if (xhr.status === 200 && xhr.responseText) {
+                try {
+                    this.quiz = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    location.href = '#/';
                 }
-
-                this.userTest = JSON.parse(sessionStorage.getItem('userTest'));
-
+                this.startQuiz();
+            } else {
+                location.href = '#/';
             }
-        },
-        startQuiz: function () {
+
+
+        }
+    }
+
+        startQuiz() {
             this.testTitleElement = document.getElementById('title');
             this.testOptionsElement = document.getElementById('options');
             this.nextButtonElement = document.getElementById('next');
@@ -64,7 +66,7 @@
                     this.complete();
                 }
             }.bind(this), 1000);
-            },
+            }
 
         prepareProgressBar() {
 
@@ -84,8 +86,8 @@
                 this.progresBarElement.appendChild(itemElement);
 
             }
-        },
-        showQuestion: function () {
+        }
+        showQuestion() {
             const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
             const chosenOption = this.userResult.find(item => item.questionId === activeQuestion.id);
             this.testTitleElement.innerHTML = '<span>Вопрос ' + this.currentQuestionIndex
@@ -139,11 +141,11 @@
                 this.prevButtonElement.setAttribute('disabled', 'disabled');
             }
 
-        },
-        chooseAnswer: function () {
+        }
+        chooseAnswer() {
             this.nextButtonElement.removeAttribute('disabled');
             this.passLinkElement.classList.add('disabled-link');
-        },
+        }
         move(action) {
             const activeQuestion = this.quiz.questions[this.currentQuestionIndex - 1];
             const choosenAnswer = Array.from(document.getElementsByClassName('option-answer')).find(element => {
@@ -206,13 +208,12 @@
             })
 
             this.showQuestion();
-        },
+        }
         complete() {
-            const url = new URL(location.href);
-            const testId = url.searchParams.get('id');
-            const name = url.searchParams.get('name');
-            const lastName = url.searchParams.get('lastName');
-            const email = url.searchParams.get('email');
+            const testId = this.userTest.testId;
+            const name = this.user.name;
+            const lastName = this.user.lastName;
+            const email = this.user.email;
 
             const xhr = new XMLHttpRequest();
             xhr.open("POST", 'https://testologia.ru/pass-quiz?id=' + testId, false);
@@ -229,23 +230,20 @@
                 try {
                     result = JSON.parse(xhr.responseText);
                 } catch (e) {
-                    location.href = 'index.html';
+                    location.href = '#/';
                 }
                 if (result) {
                     this.userTest.userAnswer = this.userResult;
                     this.userTest.result = result;
 
                     sessionStorage.setItem("userTest", JSON.stringify(this.userTest))
-                    location.href = 'result.html?score=' + result.score + '&total=' + result.total;
+                    location.href = '#/result';
                 }
             } else {
-                location.href = 'index.html';
+                location.href = '#/';
             }
         }
 
 
     }
-
-    Test.init();
-})();
 
