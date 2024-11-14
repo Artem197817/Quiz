@@ -1,3 +1,5 @@
+import {CustomHttp} from "../services/custom-http.js";
+
 export class Form {
 
     constructor(page) {
@@ -88,20 +90,35 @@ export class Form {
         return isValid;
     }
 
-    processForm() {
+   async processForm() {
         if (this.validateForm) {
-            let paramString = '';
-            let user = {};
-            this.fields.forEach(item => {
-                paramString += (!paramString ? '?' : '&') + item.name + '=' + item.element.value
-                user[item.name] = item.element.value
-            });
 
-            if (sessionStorage.getItem('user')) {
-                sessionStorage.clear
+            if (this.page === 'signUp'){
+                try{
+                    const result = await CustomHttp.request('http://localhost:3003/api/signup', 'POST',
+                        {
+                            name: this.fields.find(item => item.name === 'name').element.value,
+                            lastName: this.fields.find(item => item.name === 'lastName').element.value,
+                            email: this.fields.find(item => item.name === 'email').element.value,
+                            password: this.fields.find(item => item.name === 'password').element.value,
+                        });
+
+    
+                    if(result){
+                        if(result.error || !result.user){
+                            throw new Error(result.message);
+                        }
+                        location.href = '#/choice';
+                    }    
+
+                }catch(error){
+                        console.log(error);
+                }
+
+            }else{
+
             }
-            sessionStorage.setItem("user", JSON.stringify(user));
-            location.href = '#/choice' + paramString;
+
         }
     }
 
