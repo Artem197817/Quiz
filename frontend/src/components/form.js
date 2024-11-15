@@ -1,4 +1,5 @@
 import {CustomHttp} from "../services/custom-http.js";
+import {Auth} from "../services/auth.js";
 
 export class Form {
 
@@ -91,6 +92,9 @@ export class Form {
     }
 
    async processForm() {
+        const email = this.fields.find(item => item.name === 'email').element.value;
+        const password = this.fields.find(item => item.name === 'password').element.value;
+
         if (this.validateForm) {
 
             if (this.page === 'signUp'){
@@ -99,8 +103,8 @@ export class Form {
                         {
                             name: this.fields.find(item => item.name === 'name').element.value,
                             lastName: this.fields.find(item => item.name === 'lastName').element.value,
-                            email: this.fields.find(item => item.name === 'email').element.value,
-                            password: this.fields.find(item => item.name === 'password').element.value,
+                            email: email,
+                            password: password,
                         });
 
     
@@ -112,12 +116,30 @@ export class Form {
                     }    
 
                 }catch(error){
-                        console.log(error);
+                    return  console.log(error);
                 }
 
-            }else{
-
             }
+                try{
+                    const result = await CustomHttp.request('http://localhost:3003/api/login', 'POST',
+                        {
+                            email: email,
+                            password: password,
+                        });
+
+    
+                    if(result){
+                        if(result.error || !result.accessToken || !result.refreshToken || !result.fullName || !result.userId){
+                            throw new Error(result.message);
+                        }
+                        Auth.setToken(result.accessToken, )
+                        location.href = '#/choice';
+                    }    
+
+                }catch(error){
+                        console.log(error);
+                }
+            
 
         }
     }

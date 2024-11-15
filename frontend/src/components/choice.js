@@ -1,5 +1,5 @@
 import {UrlManager} from '../utils/url-manager.js';
-import {CustomHttp} from "../services/custom-http";
+import {CustomHttp} from "../services/custom-http.js";
 
 export class Choice {
 
@@ -10,7 +10,7 @@ export class Choice {
 
     async init(){
         try{
-           const result = await CustomHttp.request('http://localhost:3003/api/tests', 'GET');
+           const result = await CustomHttp.request('http://localhost:3003/api/tests');
 
             if(result){
                 if(result.error){
@@ -68,9 +68,6 @@ export class Choice {
                 sessionStorage.removeItem('userTest')
             }
             sessionStorage.setItem("userTest", JSON.stringify(userTest))
-            location.href = '#/test?name=' + this.routesParam.name
-                + '&lastName=' + this.routesParam.lastName + '&email='
-                + this.routesParam.email + '&id=' + dataId;
         }
     }
 }
