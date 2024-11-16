@@ -23,7 +23,7 @@ if(token) {
         }
 
         const response = await fetch(url, params);
-
+        console.log(response);
         if (!response.ok) {
             if(response.status=== 401){
              const result = await Auth.processUnAuthResponse();

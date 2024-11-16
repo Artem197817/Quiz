@@ -20,7 +20,12 @@ body {
 .header {
     padding: 45px 0 40px 0;
     border-bottom: 1px solid #DCDCF3;
+}
 
+.header .container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .container {
@@ -154,4 +159,19 @@ input[type='radio']:checked::before {
 .link-block{
     display: flex;
     justify-content: flex-end;
+}
+.profile{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-image{
+    margin-right: 10px;
+
+}
+.profile-user{
+    font-size: 22px;
+}
+.profile-logout{
+    font-size: 12px;
 }

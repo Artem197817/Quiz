@@ -1,4 +1,6 @@
 import {UrlManager} from "../utils/url-manager.js";
+import {CustomHttp} from "../services/custom-http";
+import config from "../../config/config";
 
 export class Test {
 
@@ -16,24 +18,24 @@ export class Test {
         this.passLinkElement= null;
         this.routesParam = UrlManager.getQueryParam();
         this.user=JSON.parse(sessionStorage.getItem('user'));
-        UrlManager.checkUserData(this.routesParam);
-        const testId = this.userTest.testId;
-        if (testId) {
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", 'https://testologia.ru/get-quiz?id=' + testId, false);
-            xhr.send();
-            if (xhr.status === 200 && xhr.responseText) {
-                try {
-                    this.quiz = JSON.parse(xhr.responseText);
-                } catch (e) {
-                    location.href = '#/';
+        this.init();
+    }
+
+   async init(){
+        if (this.routesParam.id) {
+            try{
+                const result = await CustomHttp.request(config.host + '/tests/' + this.routesParam.id);
+                if(result){
+                    if(result.error){
+                        throw new Error(result.error);
+                    }
+                    this.quiz = result;
+                    this.startQuiz();
                 }
-                this.startQuiz();
-            } else {
-                location.href = '#/';
+
+            }catch(error){
+                console.log(error);
             }
-
-
         }
     }
 

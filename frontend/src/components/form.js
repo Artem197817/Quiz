@@ -92,10 +92,12 @@ export class Form {
     }
 
    async processForm() {
-        const email = this.fields.find(item => item.name === 'email').element.value;
-        const password = this.fields.find(item => item.name === 'password').element.value;
+
 
         if (this.validateForm) {
+
+            const email = this.fields.find(item => item.name === 'email').element.value;
+            const password = this.fields.find(item => item.name === 'password').element.value;
 
             if (this.page === 'signUp'){
                 try{
@@ -132,7 +134,11 @@ export class Form {
                         if(result.error || !result.accessToken || !result.refreshToken || !result.fullName || !result.userId){
                             throw new Error(result.message);
                         }
-                        Auth.setToken(result.accessToken, )
+                        Auth.setToken(result.accessToken, result.refreshToken)
+                        Auth.setUserInfo({
+                            fullName: result.fullName,
+                            userId: result.id,
+                        })
                         location.href = '#/choice';
                     }    
 

@@ -1,5 +1,6 @@
 import {UrlManager} from '../utils/url-manager.js';
 import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config";
 
 export class Choice {
 
@@ -11,7 +12,6 @@ export class Choice {
     async init(){
         try{
            const result = await CustomHttp.request('http://localhost:3003/api/tests');
-
             if(result){
                 if(result.error){
                     throw new Error(result.error);
@@ -19,7 +19,6 @@ export class Choice {
                 this.quizzes = result;
                 this.processQuizzes();
             }
-
         }catch(error){
             console.log(error);
         }
@@ -61,13 +60,7 @@ export class Choice {
     choiceQuiz(element) {
         const dataId = element.getAttribute('data-id');
         if (dataId) {
-            let userTest = {
-                testId: dataId,
-            };
-            if (sessionStorage.getItem('userTest')) {
-                sessionStorage.removeItem('userTest')
-            }
-            sessionStorage.setItem("userTest", JSON.stringify(userTest))
+            location.href = '#/test?id=' + dataId;
         }
     }
 }
