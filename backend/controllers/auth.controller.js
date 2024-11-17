@@ -78,6 +78,7 @@ class AuthController {
                 refreshToken,
                 fullName: user.name + ' ' + user.lastName,
                 userId: user.id,
+                email: user.email,
                 message: "Logged in sucessfully",
             });
         } catch (err) {

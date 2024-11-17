@@ -19,7 +19,7 @@ export class Result {
     async init() {
         const userInfo = Auth.getUserInfo();
         if (!userInfo) {
-          //  location.href = '#/'
+            location.href = '#/'
         }
         if (this.routesParam.id) {
             try {
@@ -29,7 +29,7 @@ export class Result {
                     if (result.error) {
                         throw new Error(result.error);
                     }
-
+                    sessionStorage.setItem('testId', result.test_id)
                     this.showResult(result);
                     return;
                 }
@@ -38,7 +38,7 @@ export class Result {
                 console.log(error);
             }
         }
-       // location.href = '#/'
+        location.href = '#/'
     }
 
 }
