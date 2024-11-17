@@ -1,16 +1,44 @@
+import {UrlManager} from "../utils/url-manager.js";
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+import {Auth} from "../services/auth.js";
 
-    export  class Result{
+export class Result {
+
 
     constructor() {
-        this.userTest = null;
-        this.userTest = JSON.parse(sessionStorage.getItem('userTest'));
-        console.log(this.userTest);
-        this.showResult();
+        this.routesParam = UrlManager.getQueryParam();
+        this.init();
     }
 
-        showResult() {
-            document.getElementById('result-scope').innerText =
-                this.userTest.result.score + '/' + this.userTest.result.total;
+    showResult(result) {
+        document.getElementById('result-scope').innerText =
+            result.score + '/' + result.total;
+    }
+
+    async init() {
+        const userInfo = Auth.getUserInfo();
+        if (!userInfo) {
+          //  location.href = '#/'
         }
+        if (this.routesParam.id) {
+            try {
+                const result = await CustomHttp.request(config.host + '/tests/' + this.routesParam.id +
+                    '/result?userId=' + userInfo.userId);
+                if (result) {
+                    if (result.error) {
+                        throw new Error(result.error);
+                    }
 
+                    this.showResult(result);
+                    return;
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+       // location.href = '#/'
     }
+
+}

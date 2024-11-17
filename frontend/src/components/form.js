@@ -4,27 +4,33 @@ import {Auth} from "../services/auth.js";
 export class Form {
 
     constructor(page) {
-        this.elementAgree = null,
-            this.processElement = null,
-            this.page = page,
+        this.elementAgree = null;
+        this.processElement = null;
+        this.page = page;
 
-            this.fields = [
+        const accessToken = localStorage.getItem(Auth.accessTokenKey);
+        if (accessToken) {
+            location.href = '#/choice';
+            return;
+        }
 
-                {
-                    name: 'email',
-                    id: 'email',
-                    element: null,
-                    regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    valid: false,
-                },
-                {
-                    name: 'password',
-                    id: 'password',
-                    element: null,
-                    regex: /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-                    valid: false,
-                },
-            ]
+        this.fields = [
+
+            {
+                name: 'email',
+                id: 'email',
+                element: null,
+                regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                valid: false,
+            },
+            {
+                name: 'password',
+                id: 'password',
+                element: null,
+                regex: /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
+                valid: false,
+            },
+        ]
 
         if (this.page === 'signUp') {
             this.fields.unshift(
@@ -82,7 +88,7 @@ export class Form {
 
     validateForm() {
         const validForm = this.fields.every(item => item.valid);
-        const isValid = this.elementAgree? this.elementAgree.checked && validForm:  validForm;
+        const isValid = this.elementAgree ? this.elementAgree.checked && validForm : validForm;
         if (isValid) {
             this.processElement.removeAttribute('disabled');
         } else {
@@ -91,7 +97,7 @@ export class Form {
         return isValid;
     }
 
-   async processForm() {
+    async processForm() {
 
 
         if (this.validateForm) {
@@ -99,8 +105,8 @@ export class Form {
             const email = this.fields.find(item => item.name === 'email').element.value;
             const password = this.fields.find(item => item.name === 'password').element.value;
 
-            if (this.page === 'signUp'){
-                try{
+            if (this.page === 'signUp') {
+                try {
                     const result = await CustomHttp.request('http://localhost:3003/api/signup', 'POST',
                         {
                             name: this.fields.find(item => item.name === 'name').element.value,
@@ -109,43 +115,43 @@ export class Form {
                             password: password,
                         });
 
-    
-                    if(result){
-                        if(result.error || !result.user){
+
+                    if (result) {
+                        if (result.error || !result.user) {
                             throw new Error(result.message);
                         }
-                        location.href = '#/choice';
-                    }    
+                    }
 
-                }catch(error){
-                    return  console.log(error);
+                } catch (error) {
+                    return console.log(error);
                 }
 
             }
-                try{
-                    const result = await CustomHttp.request('http://localhost:3003/api/login', 'POST',
-                        {
-                            email: email,
-                            password: password,
-                        });
+            try {
+                const result = await CustomHttp.request('http://localhost:3003/api/login', 'POST',
+                    {
+                        email: email,
+                        password: password,
+                    });
 
-    
-                    if(result){
-                        if(result.error || !result.accessToken || !result.refreshToken || !result.fullName || !result.userId){
-                            throw new Error(result.message);
-                        }
-                        Auth.setToken(result.accessToken, result.refreshToken)
-                        Auth.setUserInfo({
-                            fullName: result.fullName,
-                            userId: result.id,
-                        })
-                        location.href = '#/choice';
-                    }    
 
-                }catch(error){
-                        console.log(error);
+                if (result) {
+                    if (result.error || !result.accessToken || !result.refreshToken || !result.fullName || !result.userId) {
+                        throw new Error(result.message);
+                    }
+                    Auth.setToken(result.accessToken, result.refreshToken)
+                    console.log(result)
+                    Auth.setUserInfo({
+                        fullName: result.fullName,
+                        userId: result.userId,
+                    })
+                    location.href = '#/choice';
                 }
-            
+
+            } catch (error) {
+                console.log(error);
+            }
+
 
         }
     }

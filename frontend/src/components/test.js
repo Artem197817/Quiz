@@ -1,6 +1,7 @@
 import {UrlManager} from "../utils/url-manager.js";
-import {CustomHttp} from "../services/custom-http";
-import config from "../../config/config";
+import {CustomHttp} from "../services/custom-http.js";
+import config from "../../config/config.js";
+import {Auth} from "../services/auth.js";
 
 export class Test {
 
@@ -58,13 +59,13 @@ export class Test {
             const timerElement = document.getElementById('timer');
             let seconds = 59;
 
-            const interval = setInterval(function () {
+            this.interval = setInterval(function () {
                 seconds--;
 
                 timerElement.innerText = seconds;
 
                 if (seconds <= 0) {
-                    clearInterval(interval);
+                    clearInterval(this.interval);
                     this.complete();
                 }
             }.bind(this), 1000);
@@ -192,6 +193,7 @@ export class Test {
                 this.currentQuestionIndex--;
             }
             if (this.currentQuestionIndex > this.quiz.questions.length) {
+                clearInterval(this.interval);
                 this.complete();
                 return
             }
@@ -211,41 +213,31 @@ export class Test {
 
             this.showQuestion();
         }
-        complete() {
-            const testId = this.userTest.testId;
-            const name = this.user.name;
-            const lastName = this.user.lastName;
-            const email = this.user.email;
+       async complete() {
+           const userInfo = Auth.getUserInfo();
+           if (!userInfo) {
+               location.href = '#/'
+           }
 
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", 'https://testologia.ru/pass-quiz?id=' + testId, false);
-            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            xhr.send(JSON.stringify({
-                name: name,
-                lastName: lastName,
-                email: email,
-                results: this.userResult,
-            }));
+           try {
 
-            if (xhr.status === 200 && xhr.responseText) {
-                let result = null;
-                try {
-                    result = JSON.parse(xhr.responseText);
-                } catch (e) {
-                    location.href = '#/';
-                }
-                if (result) {
-                    this.userTest.userAnswer = this.userResult;
-                    this.userTest.result = result;
+               const result = await CustomHttp.request(config.host + '/tests/' + this.routesParam.id
+                   + '/pass', 'POST', {
+                   userId: userInfo.userId,
+                   results: this.userResult,
+               })
 
-                    sessionStorage.setItem("userTest", JSON.stringify(this.userTest))
-                    location.href = '#/result';
-                }
-            } else {
-                location.href = '#/';
-            }
-        }
+               if (result) {
+                   if (result.error) {
+                       throw new Error(result.error);
+                   }
+                   location.href = '#/result?id=' + this.routesParam.id
+               }
 
+           } catch (e) {
+               console.log(e)
+           }
 
+       }
     }
 

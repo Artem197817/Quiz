@@ -8,6 +8,7 @@ class MiddlewareUtils {
                 res.status(401).json({error: err.message});
             } else {
                 // add user id to request
+                req.body = req.body || {};
                 req.body.user = decoded;
                 next();
             }

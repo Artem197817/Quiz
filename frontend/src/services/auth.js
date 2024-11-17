@@ -26,7 +26,7 @@ export class Auth{
                     body: JSON.stringify({refreshToken: refreshToken})
                     })
                     if(response && response.ok){
-                        const result = response.json();
+                        const result = await response.json();
                         if(result && !result.error){
                                 this.setToken(result.accessToken, result.refreshToken)
                                 return true;
@@ -57,7 +57,7 @@ export class Auth{
             body: JSON.stringify({refreshToken: refreshToken})
         })
         if(response && response.ok){
-            const result = response.json();
+            const result = await response.json();
             if(result && !result.error){
                 Auth.removeToken();
                 localStorage.removeItem(Auth.userInfoKey);
